@@ -13,15 +13,15 @@ public class Main {
 		cnt = 0;
 		fib(n);
 		
-		bw.write((cnt+1)/2 + " " + (n-2) + "\n");
+		bw.write(cnt + " " + (n-2) + "\n");
 		
 		bw.flush();
 		bw.close();
 	}
 	
 	public static int fib(int n) {
-		cnt += 1;
 		if (n == 1 || n == 2) {
+			cnt += 1;
 			return 1;
 		} else {
 			return fib(n-1) + fib(n-2);
