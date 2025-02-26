@@ -1,46 +1,47 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-class Solution
-{
-	public static void main(String args[]) throws Exception
-	{
+class Solution {
+	static int n, b, arr[], min;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
 		
-		int test_case = Integer.parseInt(br.readLine());
-		for (int t = 1; t <= test_case; t++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int n = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
+		int tc = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= tc; t++) {
+			st = new StringTokenizer(br.readLine());
+			n = Integer.parseInt(st.nextToken());
+			b = Integer.parseInt(st.nextToken());
 			
-			int[] arr = new int[n];
-			String[] input = br.readLine().split(" ");
+			arr = new int[n];
+			st = new StringTokenizer(br.readLine());
+			min = Integer.MAX_VALUE;
 			for (int i = 0; i < n; i++) {
-				arr[i] = Integer.parseInt(input[i]);
+				arr[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			int minValue = Integer.MAX_VALUE;
-			
-			for (int i = 0; i < (1 << n); i++) {
-				List<Integer> subset = new ArrayList<>();
+			for (int i = 1; i < (1 << n); i++) {
 				int sum = 0;
+				List<Integer> list = new ArrayList<>();
 				for (int j = 0; j < n; j++) {
 					if ((i & (1 << j)) != 0) {
-						subset.add(arr[j]);
+						list.add(arr[j]);
 					}
 				}
 				
-				for (int k : subset) {
-					sum += k;
+				for (int num : list) {
+					sum += num;
 				}
 				
-				if (sum >= b && sum - b < minValue) {
-					minValue = sum - b;
+				if (sum >= b) {
+					min = Math.min(min, sum - b);
 				}
 			}
-			bw.write("#" + t + " " + minValue + "\n");
+			
+			bw.write("#" + t + " " + min + "\n");
 		}
+		bw.flush();
 		bw.close();
 	}
 }
