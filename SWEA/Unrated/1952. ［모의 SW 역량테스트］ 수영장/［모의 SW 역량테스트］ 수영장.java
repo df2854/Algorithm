@@ -39,6 +39,8 @@ class Solution {
 			}
 			return;
 		}
+
+		if (sum >= result) return;
 		
 		if (month[m] == 0) bt(m+1, sum);
 		else {
