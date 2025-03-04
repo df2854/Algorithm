@@ -6,6 +6,7 @@ public class Main {
 	static StringBuilder sb;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 		n = Integer.parseInt(br.readLine());
 		
@@ -21,9 +22,10 @@ public class Main {
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < m; i++) {
 			int num = Integer.parseInt(st.nextToken());
-			System.out.println(binarySearch(num));
+			bw.write(binarySearch(num) + "\n");
 		}
-		
+		bw.flush();
+		bw.close();
 	}
 	private static int binarySearch(int target) {
 		int start = 0;
