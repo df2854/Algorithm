@@ -19,6 +19,7 @@ public class Main {
 		int limit = Integer.parseInt(br.readLine());
 		
 		int start = 0;
+		// 파라메트릭 서치
 		while (start <= end) {
 			int mid = (start + end) / 2;
 			int sum = 0;
