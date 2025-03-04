@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int n, m, arr[], target[];
+	static int n, m, arr[];
 	static StringBuilder sb;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,18 +15,15 @@ public class Main {
 			 arr[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		m = Integer.parseInt(br.readLine());
-		target = new int[m];
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < m; i++) {
-			target[i] = Integer.parseInt(st.nextToken());
-		}
-		
 		Arrays.sort(arr);
 		
+		m = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < m; i++) {
-			System.out.println(binarySearch(target[i]));
+			int num = Integer.parseInt(st.nextToken());
+			System.out.println(binarySearch(num));
 		}
+		
 	}
 	private static int binarySearch(int target) {
 		int start = 0;
