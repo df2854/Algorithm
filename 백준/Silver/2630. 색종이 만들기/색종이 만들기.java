@@ -38,10 +38,12 @@ public class Main {
 			return;
 		}
 		
-		solve(startY, startX, size/2);
-		solve(startY, startX + size/2, size/2);
-		solve(startY + size/2, startX, size/2);
-		solve(startY + size/2, startX + size/2, size/2);
+		else {
+			solve(startY, startX, size/2);
+			solve(startY, startX + size/2, size/2);
+			solve(startY + size/2, startX, size/2);
+			solve(startY + size/2, startX + size/2, size/2);
+		}
 	}
 	
 	private static int check(int startY, int startX, int size) {
