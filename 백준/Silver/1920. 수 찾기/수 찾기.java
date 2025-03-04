@@ -2,51 +2,48 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int n, m;
-	static int[] arr, array;
+	static int n, m, arr[], target[];
+	static StringBuilder sb;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		
+		StringTokenizer st;
 		n = Integer.parseInt(br.readLine());
+		
 		arr = new int[n];
-		String[] input1 = br.readLine().split(" ");
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
-			arr[i] = Integer.parseInt(input1[i]);
+			 arr[i] = Integer.parseInt(st.nextToken());
 		}
 		
 		m = Integer.parseInt(br.readLine());
-		array = new int[m];
-		String[] input2 = br.readLine().split(" ");
+		target = new int[m];
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < m; i++) {
-			array[i] = Integer.parseInt(input2[i]);
+			target[i] = Integer.parseInt(st.nextToken());
 		}
 		
 		Arrays.sort(arr);
 		
-		int left = 0, right = n - 1;
-		
 		for (int i = 0; i < m; i++) {
-			bw.write(binarySearch(array[i], left, right) + "\n");
+			System.out.println(binarySearch(target[i]));
 		}
-		
-		bw.flush();
-		bw.close();
 	}
-	
-	public static int binarySearch(int key, int left, int right) {
-		int mid;
-		while (left <= right) {
-			mid = (left + right) / 2;
-			if (key == arr[mid]) {
+	private static int binarySearch(int target) {
+		int start = 0;
+		int end = n - 1;
+		
+		while (start <= end) {
+			int mid = (start + end) / 2;
+			if (arr[mid] == target) {
 				return 1;
-			} else if (key < arr[mid]) {
-				right = mid - 1;
-			} else if (key > arr[mid]) {
-				left = mid + 1;
+			} else if (arr[mid] > target) {
+				end = mid - 1;
+			} else if (arr[mid] < target) {
+				start = mid + 1;
 			}
 		}
 		
 		return 0;
 	}
+	
 }
