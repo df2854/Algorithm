@@ -2,41 +2,60 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+	static int n, m, target;
+	static int[] arr;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
-
-		int n = Integer.parseInt(br.readLine());
-		int[] card = new int[n];
-		String[] input = br.readLine().split(" ");
+		
+		n = Integer.parseInt(br.readLine());
+		arr = new int[n];
+		
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < n; i++) {
-			card[i] = Integer.parseInt(input[i]);
+			arr[i] = Integer.parseInt(st.nextToken());
 		}
+		Arrays.sort(arr);
+		
+		m = Integer.parseInt(br.readLine());
 
-		int m = Integer.parseInt(br.readLine());
-		int[] target = new int[n];
-		input = br.readLine().split(" ");
+		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < m; i++) {
-			target[i] = Integer.parseInt(input[i]);
-		}
-
-		Map<Integer, Integer> map = new HashMap<>();
-		for (int i = 0; i < n; i++) {
-			if (map.containsKey(card[i])) {
-				map.put(card[i], map.get(card[i]) + 1);
-			} else {
-				map.put(card[i], 1);
-			}
-		}
-
-		for (int i = 0; i < m; i++) {
-			if (map.containsKey(target[i])) {
-				sb.append(map.get(target[i])).append(" ");
-			} else {
-				sb.append(0).append(" ");
-			}
+			target = Integer.parseInt(st.nextToken());
+			sb.append(upperBound(target) - lowerBound(target)).append(" ");
 		}
 		
-		System.out.println(sb);
+		bw.write(sb + "\n");
+		bw.flush();
+		bw.close();
 	}
+	private static int lowerBound(int num) {
+		int left = 0;
+		int right = n;
+		while (left < right) {
+			int mid = (left + right) / 2;
+			if (arr[mid] >= num) {
+				right = mid;
+			} else {
+				left = mid + 1;
+			}
+		}
+		return left;
+	}
+	private static int upperBound(int num) {
+		int left = 0;
+		int right = n;
+		while (left < right) {
+			int mid = (left + right) / 2;
+			if (arr[mid] > num) {
+				right = mid;
+			} else {
+				left = mid + 1;
+			}
+		}
+		return left;
+	}
+
 }
