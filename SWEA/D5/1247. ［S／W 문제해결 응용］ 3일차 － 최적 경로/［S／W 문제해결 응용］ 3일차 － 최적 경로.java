@@ -1,42 +1,48 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-class Solution {
-	static int tc, n, startY, startX, endY, endX, result;
-	static List<int[]> list;
+public class Solution {
+	static int tc, n, result, endX, endY;
 	static boolean[] visited;
-	public static void main(String[] args) throws IOException {
+	static List<int[]> list;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
+		
 		tc = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= tc; t++) {
 			n = Integer.parseInt(br.readLine());
 			
-			list = new ArrayList<>();
-			
 			st = new StringTokenizer(br.readLine());
-			startX = Integer.parseInt(st.nextToken());
-			startY = Integer.parseInt(st.nextToken());
+			// 회사 위치
+			int startX = Integer.parseInt(st.nextToken());
+			int startY = Integer.parseInt(st.nextToken());
+			// 집 위치
 			endX = Integer.parseInt(st.nextToken());
 			endY = Integer.parseInt(st.nextToken());
 			
-			for (int i = 0; i < n; i++) {
+			list = new ArrayList<>();
+			for (int i = 0; i < n; i++) { // 고개들 집 위치
 				int x = Integer.parseInt(st.nextToken());
 				int y = Integer.parseInt(st.nextToken());
-				list.add(new int[] {y, x});
+				list.add(new int[]{x, y});
 			}
 			
-			visited = new boolean[n];
+			visited = new boolean[n];			
 			result = Integer.MAX_VALUE;
 			
-			dfs(0, 0, startY, startX);
+			dfs(0, 0, startX, startY);
 			
-			System.out.println("#" + t + " " + result);
+			bw.write("#" + t + " " + result + "\n");
+			
 		}
+		bw.flush();
+		bw.close();
 	}
-	private static void dfs(int idx, int sum, int y, int x) {
-		if (idx == n) {	
-			result = Math.min(result, sum + (Math.abs(y - endY) + Math.abs(x - endX)));
+	private static void dfs(int idx, int sum, int startX, int startY) {
+		if (idx == n) {
+			result = Math.min(result, sum + Math.abs(startX - endX) + Math.abs(startY - endY));
 			return;
 		}
 		
@@ -45,13 +51,14 @@ class Solution {
 		for (int i = 0; i < n; i++) {
 			if (visited[i]) continue;
 			
-			int ny = list.get(i)[0];
-			int nx = list.get(i)[1];
 			visited[i] = true;
+			int x = list.get(i)[0];
+			int y = list.get(i)[1];
 			
-			dfs(idx + 1, sum + (Math.abs(ny - y) + Math.abs(nx - x)), ny, nx);
+			dfs(idx + 1, sum + Math.abs(startX - x) + Math.abs(startY - y), x, y);
 			
 			visited[i] = false;
 		}
 	}
+
 }
