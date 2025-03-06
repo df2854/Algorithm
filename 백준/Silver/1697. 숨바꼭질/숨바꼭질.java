@@ -2,47 +2,38 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static final int MAX = 100000;
-    public static void main(String[] args) throws IOException {
+	static int n, k;
+	static int[] time;
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		int n = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
-
-		int[] visited = new int[MAX + 1];
-		Arrays.fill(visited, -1);
-		visited[n] = 0;
-
-		int a = 0;
-
-		Queue<Integer> queue = new LinkedList<>();
-
-		queue.offer(n);
-
-		while (!queue.isEmpty()) {
-			int crr = queue.poll();
-
-			if (crr == k ) {
-				System.out.println(visited[crr]);
-			}
-
-			for (int i = -1; i <= 2; i++) {
-				if (i == 0) continue;
-				else if (i == 2) {
-					a = crr * i;
-					if (a >= 0 && a <= MAX && visited[a] == -1) {
-						visited[a] = visited[crr] + 1;
-						queue.offer(a);
-					}
-				} else {
-					a = crr + i;
-					if (a >= 0 && a <= MAX && visited[a] == -1) {
-						visited[a] = visited[crr] + 1;
-						queue.offer(a);
-					}
+		StringTokenizer st;
+		
+		st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		k = Integer.parseInt(st.nextToken());
+		
+		time = new int[100001];
+		Arrays.fill(time, -1);
+		
+		Queue<Integer> que = new ArrayDeque<>();
+		que.offer(n);
+		time[n] = 0;
+		while (!que.isEmpty()) {
+			int current = que.poll();
+			if (current == k) break;
+			
+			int[] a = {1, -1, current};
+			
+			for (int i = 0; i < 3; i++) {
+				int newPosition = current + a[i];
+				
+				if (newPosition >= 0 && newPosition <= 100000 && time[newPosition] == -1) {
+					time[newPosition] = time[current] + 1;
+					que.offer(newPosition);
 				}
 			}
 		}
+		
+		System.out.println(time[k]);
 	}
 }
