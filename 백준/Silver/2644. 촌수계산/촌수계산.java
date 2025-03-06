@@ -37,6 +37,8 @@ public class Main {
 		dist[x] = 0;
 		while(!que.isEmpty()) {
 			int current = que.poll();
+            if (current == y) break;
+            
 			for (int num : list[current]) {
 				if (dist[num] == -1) {
 					dist[num] = dist[current] + 1;
