@@ -1,60 +1,52 @@
-/*
- 접근 방법 : 백준 1654번 랜선 자르기 문제와 비슷하다. 랜선 자르기는 잘랐을때 나눠지는 개수, 휴게소 세우기는 휴게소 설치 수
- 핵심 로직 : 각 구간 별 거리를 저장한 배열을 구현하여 이분 탐색
- 시간 복잡도 : O(n * log L)
- */
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int n, m, l, result;
-	static int[] arr, dist;
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		l = Integer.parseInt(st.nextToken());
-		
-		arr = new int[n];
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < n; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		Arrays.sort(arr);
-		// 출발점에서 첫 휴게소 거리 + 각 휴게소 거리 + 마지막 휴게소에서 도착점 거리
-		dist = new int[n+1];
-		
-		if (n == 0) dist[0] = l;
-		else {
-			dist[0] = arr[0];
-			for (int i = 1; i < n; i++) {
-				dist[i] = arr[i] - arr[i-1];
-			}
-			dist[n] = l - arr[n-1];
-		}
-		
-		// 1 <= 휴게소 위치 <= l - 1
-		int left = 1, right = l - 1;
-		
-		result = Integer.MAX_VALUE;
-		while (left <= right) {
-			int mid = (left + right) / 2;
-			int count = 0;
-			for (int num : dist) {
-				count += (num - 1) / mid; // "count : 휴개소 설치 수"이므로 (num - 1) / mid
-			}							// 예를 들어 거리가 9(num), 최대 허용 길이가 3(mid)일 때, 휴개소 설치 개수는 2 
-			
-			if (count > m) {
-				left = mid + 1;
-			} else {
-				right = mid - 1;
-				result = Math.min(result, mid);
-			}
-		}
-		
-		System.out.println(result);
- 	}	
+    static int n, m, l;
+    static int[] arr, dist;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        n = Integer.parseInt(st.nextToken()); // 기존 휴게소 개수
+        m = Integer.parseInt(st.nextToken()); // 추가로 세울 수 있는 휴게소 개수
+        l = Integer.parseInt(st.nextToken()); // 도로 길이
+
+        arr = new int[n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+
+        Arrays.sort(arr); // 휴게소 위치 정렬
+
+        // 각 구간 거리 계산
+        dist = new int[n + 1];
+        dist[0] = arr.length > 0 ? arr[0] : l; // 출발점부터 첫 휴게소 거리
+        for (int i = 1; i < n; i++) {
+            dist[i] = arr[i] - arr[i - 1];
+        }
+        dist[n] = l - (n > 0 ? arr[n - 1] : 0); // 마지막 휴게소부터 종점까지 거리
+
+        int answer = l; // 가능한 최대 거리로 초기화
+
+        // 구간 최대 길이 1부터 L까지 순회 (브루트포스)
+        for (int maxDist = 1; maxDist <= l; maxDist++) {
+            int cnt = 0; // 필요한 휴게소 개수
+
+            for (int d : dist) {
+                if (d > maxDist) {
+                    cnt += (d - 1) / maxDist; // 필요한 휴게소 수 (주의: (d-1)/maxDist)
+                }
+            }
+
+            if (cnt <= m) { // 설치 가능한 범위 내라면
+                answer = maxDist; // 최소 거리 갱신
+                break; // 최소값 찾았으므로 바로 종료 (더 이상 볼 필요 없음)
+            }
+        }
+
+        System.out.println(answer); // 정답 출력
+    }
 }
