@@ -1,3 +1,7 @@
+/*
+ 접근 방법 : 좋은 수는 어떤 수가 다른 수 두 개의 합이므로 투 포인터로
+ */
+
 import java.io.*;
 import java.util.*;
 
@@ -22,19 +26,23 @@ public class Main {
 		
 		for (int i = 0; i < n; i++) {
 			int left = 0, right = n - 1;
+			int target = arr[i];
 			while (left < right) {
 				if (left == i) {
 					left++;
+					continue;
 				}
 				if (right == i) {
 					right--;
+					continue;
 				}
-				if (left == right) break;
-				if (arr[left] + arr[right] == arr[i]) {
-//					System.out.println(arr[i] + " : "+ left + "  " + right);
+				
+				int sum = arr[left] + arr[right];
+
+				if (sum == target) {
 					result++;
 					break;
-				} else if (arr[left] + arr[right] < arr[i]) left++;
+				} else if (sum < target) left++;
 				else right--;
 			}
 		}
