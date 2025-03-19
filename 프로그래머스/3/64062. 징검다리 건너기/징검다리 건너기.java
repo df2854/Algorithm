@@ -13,7 +13,7 @@ class Solution {
             right = Math.max(right, stones[i]);
         }
         
-        while(left <= right) {
+        while(left < right) {
             int mid = (left + right) / 2;
             int cnt = 0;
             int maxCnt = 0;
@@ -30,7 +30,7 @@ class Solution {
             if (maxCnt < k) {
                 left = mid + 1;
             } else {
-                right = mid - 1;
+                right = mid;
             }
         }
         
