@@ -27,6 +27,8 @@ class Solution {
 				int from = Integer.parseInt(st.nextToken());
 				int to = Integer.parseInt(st.nextToken());
 				
+				if (list[from].contains(to)) continue;
+				
 				list[from].add(to);
 			}
 			
