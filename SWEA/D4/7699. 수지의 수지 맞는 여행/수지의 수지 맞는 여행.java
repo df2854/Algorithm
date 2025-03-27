@@ -9,6 +9,7 @@ class Solution {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
 		
 		tc = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= tc; t++) {
@@ -31,10 +32,9 @@ class Solution {
 			
 			dfs(0, 0, 1);
 			
-			StringBuilder sb = new StringBuilder();
-			sb.append("#" + t + " " + result);
-			System.out.println(sb);
+			sb.append("#").append(t).append(" ").append(result).append("\n");
 		}
+		System.out.println(sb);
 	}
 	private static void dfs(int i, int j, int depth) {
 		result = Math.max(result, depth);
