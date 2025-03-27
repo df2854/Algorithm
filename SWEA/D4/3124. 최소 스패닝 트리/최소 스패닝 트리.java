@@ -1,0 +1,89 @@
+import java.io.*;
+import java.util.*;
+
+class Solution {
+	static class Edge implements Comparable<Edge> {
+		int from, to, weight;
+
+		public Edge(int from, int to, int weight) {
+			super();
+			this.from = from;
+			this.to = to;
+			this.weight = weight;
+		}
+
+		@Override
+		public int compareTo(Edge o) {
+			return Integer.compare(this.weight, o.weight);
+		}
+	}
+	static int tc, V, E, count;
+	static long result;
+	static List<Edge> edgeList;
+	static int[] parent;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		StringBuilder sb;
+		
+		tc = Integer.parseInt(br.readLine());
+		for (int t = 1; t <= tc; t++) {
+			st = new StringTokenizer(br.readLine());
+			V = Integer.parseInt(st.nextToken());
+			E = Integer.parseInt(st.nextToken());
+			
+			edgeList = new ArrayList<>();
+			
+			for (int i = 0; i < E; i++) {
+				st = new StringTokenizer(br.readLine());
+				int from = Integer.parseInt(st.nextToken());
+				int to = Integer.parseInt(st.nextToken());
+				int weight = Integer.parseInt(st.nextToken());
+				
+				edgeList.add(new Edge(from, to, weight));
+			}
+			
+			Collections.sort(edgeList);
+			make();
+			
+			result = 0;
+			count = 0;
+			
+			for (Edge e : edgeList) {
+				if (union(e.from, e.to)) {
+					result += e.weight;
+					count++;
+					if (count == V - 1) break;
+				}
+			}
+			
+			sb = new StringBuilder();
+			sb.append("#" + t + " " + result);
+			System.out.println(sb);
+		}
+	}
+	
+	private static void make() {
+		parent = new int[V+1];
+		for (int i = 1; i <= V; i ++) {
+			parent[i] = i;
+		}
+	}
+	
+	private static int find(int x) {
+		if (parent[x] != x ) {
+			parent[x] = find(parent[x]);
+		}
+		return parent[x];
+	}
+	
+	private static boolean union(int x, int y) {
+		int rootX = find(x);
+		int rootY = find(y);
+		
+		if (rootX == rootY) return false;
+		
+		parent[rootY] = rootX;
+		return true;
+	}
+}
