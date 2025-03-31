@@ -3,42 +3,40 @@ import java.util.*;
 
 class Solution {
 	static class Edge implements Comparable<Edge> {
-		int from, to;
+		int to;
 		long weight;
-
-		public Edge(int from, int to, long weight) {
-			super();
-			this.from = from;
+		
+		Edge(int to, long weight) {
 			this.to = to;
 			this.weight = weight;
 		}
 
 		@Override
-		public int compareTo(Edge o) {
+		public int compareTo(Solution.Edge o) {
 			return Long.compare(this.weight, o.weight);
 		}
 	}
-	static int tc, n, count;
+	static int tc, n;
 	static double e;
 	static long result;
-	static List<Integer> combList;
-	static List<Edge> edgeList;
-	static int[] parent, x, y;
+	static List<Edge>[] edgeList;
+	static int[] x, y;
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		StringBuilder sb;
+		StringBuilder sb = new StringBuilder();
 		
 		tc = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= tc; t++) {
 			n = Integer.parseInt(br.readLine());
-			x = new int[n];
-			y = new int[n];
 			
+			x = new int[n];
 			st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < n; i++) {
 				x[i] = Integer.parseInt(st.nextToken());
 			}
+			
+			y = new int[n];
 			st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < n; i++) {
 				y[i] = Integer.parseInt(st.nextToken());
@@ -46,59 +44,53 @@ class Solution {
 			
 			e = Double.parseDouble(br.readLine());
 			
-			combList = new ArrayList<>();
-			edgeList = new ArrayList<>();
+			edgeList = new ArrayList[n];
+			for (int i = 0; i < n; i++) {
+				edgeList[i] = new ArrayList<>();
+			}
 			
 			for (int i = 0; i < n; i++) {
-				for (int j = i+1; j < n; j++) {
+				for (int j = i; j < n; j++) {
 					long dx = x[i] - x[j];
 					long dy = y[i] - y[j];
 					long dist = dx * dx + dy * dy;
-					edgeList.add(new Edge(i, j, dist));
+					
+					edgeList[i].add(new Edge(j, dist));
+					edgeList[j].add(new Edge(i, dist));
 				}
 			}
 			
-			Collections.sort(edgeList);
-			make();
+			result = prim(1);
 			
-			result = 0;
-			count = 0;
+			sb.append("#").append(t).append(" ").append(Math.round(result * e)).append("\n");
+		}
+		System.out.println(sb);
+	}
+	private static long prim(int start) {
+		boolean[] visited = new boolean[n];
+		
+		PriorityQueue<Edge> pq = new PriorityQueue<>();
+		pq.offer(new Edge(start, 0));
+		
+		long total = 0;
+		
+		while(!pq.isEmpty()) {
+			Edge cur = pq.poll();
+			int node = cur.to;
+			long w = cur.weight;
 			
-			for (Edge e : edgeList) {
-				if (union(e.from, e.to)) {
-					result += e.weight;
-					count++;
-					if (count == n-1) break;
+			if (visited[node]) continue;
+			
+			total += w;
+			visited[node] = true;
+			
+			for (Edge e : edgeList[node]) {
+				if (!visited[e.to]) {
+					pq.offer(e);
 				}
 			}
-			
-			sb = new StringBuilder();
-			sb.append("#" + t + " " + Math.round(result * e));
-			System.out.println(sb);
 		}
-	}
-	
-	private static void make() {
-		parent = new int[n];
-		for (int i = 0; i < n; i ++) {
-			parent[i] = i;
-		}
-	}
-	
-	private static int find(int x) {
-		if (parent[x] != x ) {
-			parent[x] = find(parent[x]);
-		}
-		return parent[x];
-	}
-	
-	private static boolean union(int x, int y) {
-		int rootX = find(x);
-		int rootY = find(y);
 		
-		if (rootX == rootY) return false;
-		
-		parent[rootY] = rootX;
-		return true;
+		return total;
 	}
 }
