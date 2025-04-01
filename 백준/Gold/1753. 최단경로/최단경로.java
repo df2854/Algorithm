@@ -60,12 +60,14 @@ public class Main {
 			visited[curV] = true;
 			
 			for (Vertex n : vertexList[curV]) {
-				int newDis = dist[curV] + n.weight;
+                if (!visited[n.no]) {
+                    int newDis = dist[curV] + n.weight;
 				
-				if (dist[n.no] > newDis) {
-					dist[n.no] = newDis;
-					pq.offer(new Vertex(n.no, dist[n.no]));
-				}
+				    if (dist[n.no] > newDis) {
+					    dist[n.no] = newDis;
+					    pq.offer(new Vertex(n.no, dist[n.no]));
+				    }
+                }
 			}
 		}
 		
