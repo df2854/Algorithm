@@ -17,8 +17,8 @@ class Solution {
 			return this.w - o.w;
 		}
 	}
-	static int tc, n;
-	static int[][] map, dist;
+	static int tc, n, result;
+	static int[][] map;
 	static boolean[][] visited;
 	static int[][] dir = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 	public static void main(String[] args) throws Exception {
@@ -38,24 +38,21 @@ class Solution {
 				}
 			}
 			
-			dist = new int[n][n];
-			for (int i = 0; i < n; i++) {
-				Arrays.fill(dist[i], Integer.MAX_VALUE);
-			}
-			
 			visited = new boolean[n][n];
 			
 			PriorityQueue<Point> pq = new PriorityQueue<>();
-			dist[0][0] = 0;
 			visited[0][0] = true;
-			pq.offer(new Point(0, 0, dist[0][0]));
+			pq.offer(new Point(0, 0, 0));
 			
 			while(!pq.isEmpty()) {
 				Point cur = pq.poll();
 				int cy = cur.y;
 				int cx = cur.x;
 				
-				if (cy == n - 1 && cx == n - 1) break;
+				if (cy == n - 1 && cx == n - 1) {
+					result = cur.w;
+					break;
+				}
 				
 				for (int[] d : dir) {
 					int ny = cy + d[0];
@@ -64,15 +61,12 @@ class Solution {
 					if (ny < 0 || nx < 0 || ny >= n || nx >= n) continue;
 					if (visited[ny][nx]) continue;
 					
-					if (dist[ny][nx] > dist[cy][cx] + map[ny][nx]) {
-						dist[ny][nx] = dist[cy][cx] + map[ny][nx];
-						visited[ny][nx] = true;
-						pq.offer(new Point(ny, nx, dist[ny][nx]));
-					}
+					visited[ny][nx] = true;
+					pq.offer(new Point(ny, nx, cur.w + map[ny][nx]));
 				}
 			}
 			
-			sb.append("#").append(t).append(" ").append(dist[n-1][n-1]).append("\n");
+			sb.append("#").append(t).append(" ").append(result).append("\n");
 		}
 		System.out.println(sb);
 	}
