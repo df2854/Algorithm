@@ -32,9 +32,9 @@ class Solution {
 			
 			map = new int[n][n];
 			for (int i = 0; i < n; i++) {
-				String[] input = br.readLine().split("");
+				String input = br.readLine();
 				for (int j = 0; j < n; j++) {
-					map[i][j] = Integer.parseInt(input[j]);
+					map[i][j] = input.charAt(j) - '0';
 				}
 			}
 			
