@@ -2,36 +2,26 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	public static int n;
-	public static Integer[] dp;
-	
+	static int n, result;
+	static int[] dp;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		
+
 		n = Integer.parseInt(br.readLine());
 		
-		dp = new Integer[n + 1];
-		dp[0] = dp[1] = 0;
-		
-		bw.write(rec(n) + "\n");
-		bw.flush();
-		bw.close();
-	}
+		dp = new int[n+1];
 	
-	public static int rec(int num) {
-		if (dp[num] == null) {
-			if ((num % 3 == 0) && (num % 2 == 0)) {
-				dp[num] = Math.min(rec(num / 3) + 1, rec(num / 2) + 1);
-			} else if (num % 3 == 0) {
-				dp[num] = Math.min(rec(num / 3) + 1, rec(num - 1) + 1);
-			} else if (num % 2 == 0) {
-				dp[num] = Math.min(rec(num / 2) + 1, rec(num - 1) + 1);
-			} else {
-				dp[num] = rec(num - 1) + 1;
+		for (int i = 2; i <= n; i++) {
+			dp[i] = dp[i-1] + 1;
+			
+			if (i % 2 == 0) {
+				dp[i] = Math.min(dp[i], dp[i / 2] + 1);
+			}
+			if (i % 3 == 0) {
+				dp[i] = Math.min(dp[i], dp[i / 3] + 1);
 			}
 		}
 		
-		return dp[num];
+		System.out.println(dp[n]);
 	}
 }
