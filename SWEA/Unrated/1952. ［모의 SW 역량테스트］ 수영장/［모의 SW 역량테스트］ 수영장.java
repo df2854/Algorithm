@@ -1,14 +1,15 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 class Solution {
-	static int charge[], month[], result;
+	static int tc;
+	static int[] charge, month, dp;
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
 		
-		int tc = Integer.parseInt(br.readLine());
+		tc = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= tc; t++) {
 			charge = new int[4];
 			month = new int[12];
@@ -17,37 +18,27 @@ class Solution {
 			for (int i = 0; i < 4; i++) {
 				charge[i] = Integer.parseInt(st.nextToken());
 			}
-			
 			st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < 12; i++) {
 				month[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			result = charge[3];
+			dp = new int[13];
 			
-			bt(0, 0);
-			
-			bw.write("#" + t + " " + result + "\n");
-		}
-		bw.flush();
-		bw.close();
-	}
-	private static void bt(int m, int sum) {
-		if (m >= 12) {
-			if (sum > 0) {
-				result = Math.min(result, sum);
+			for (int i = 1; i <= 12; i++) {
+				dp[i] = dp[i-1] + charge[0] * month[i-1];
+				
+				dp[i] = Math.min(dp[i], dp[i-1] + charge[1]);
+				
+				if (i >= 3) {
+					dp[i] = Math.min(dp[i], dp[i-3] + charge[2]);
+				}
 			}
-			return;
+			
+			dp[12] = Math.min(dp[12], charge[3]);
+			sb.append("#").append(t).append(" ").append(dp[12]).append("\n");
 		}
-
-		if (sum >= result) return;
-		
-		if (month[m] == 0) bt(m+1, sum);
-		else {
-			bt(m+1, sum + (month[m] * charge[0]));
-			bt(m+1, sum + charge[1]);
-			bt(m+3, sum + charge[2]);
-		}
+		System.out.println(sb);
 	}
-
+	
 }
