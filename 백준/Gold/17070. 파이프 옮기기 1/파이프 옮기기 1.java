@@ -4,8 +4,8 @@ import java.util.*;
 public class Main {
 	static int n, result;
 	static int[][] map;
-	static int[][] dir = {{0, 1}, {1, 0}, {1, 1}};
-	public static void main(String[] args) throws Exception {
+	static int[][][] dp;
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		
@@ -18,52 +18,31 @@ public class Main {
 				map[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
-		result = 0;
 		
-		dfs(0, 1, 0);
+		dp = new int[n][n][3];
+		dp[0][1][0] = 1;
 		
-		System.out.println(result);
- 	}
-	private static void dfs(int y, int x, int direction) {
-		if (y == n-1 && x == n-1) {
-			result++;
-			return;
-		}
-		
-		if (direction == 0) {
-			int ny = y;
-			int nx = x + 1;
-			if (ny < n && nx < n && map[ny][nx] == 0) {
-				dfs(ny, nx, 0);
-			}
-		} else if (direction == 1) {
-			int ny = y + 1;
-			int nx = x;
-			if (ny < n && nx < n && map[ny][nx] == 0) {
-				dfs(ny, nx, 1);
-			}
-		} else if (direction == 2) {
-			for (int d = 0; d < 2; d ++) {
-				int ny = y + dir[d][0];
-				int nx = x + dir[d][1];
-				if (ny < n && nx < n && map[ny][nx] == 0) {
-					dfs(ny, nx, d);
+		for (int i = 0; i < n; i++) {
+			for (int j = 2; j < n; j++) {
+				for (int d = 0; d < 3; d++) {
+					if (map[i][j] == 1) continue;
+					
+					if (i == 0) {
+						dp[i][j][0] = dp[i][j-1][0];
+					}
+					
+					if (d == 0) {
+						dp[i][j][0] = dp[i][j-1][0] + dp[i][j-1][2];
+					} else if (d == 1 && i >= 1) {
+						dp[i][j][1] = dp[i-1][j][1] + dp[i-1][j][2];
+					} else if (d == 2 && i >= 1) {
+						if (map[i-1][j] == 1 || map[i][j-1] == 1) continue;
+						dp[i][j][2] = dp[i-1][j-1][0] + dp[i-1][j-1][1] + dp[i-1][j-1][2];
+					}
 				}
 			}
 		}
 		
-		if (isCheck(y, x)) {
-			dfs(y+1, x+1, 2);
-		}
+		System.out.println(dp[n-1][n-1][0] + dp[n-1][n-1][1] + dp[n-1][n-1][2]);
 	}
-	private static boolean isCheck(int y, int x) {
-		for (int[] d : dir) {
-			int ny = y + d[0];
-			int nx = x + d[1];
-			
-			if (ny >= n || nx >= n || map[ny][nx] != 0) return false;
-		}
-		return true;
-	}
-
-}
+} 
