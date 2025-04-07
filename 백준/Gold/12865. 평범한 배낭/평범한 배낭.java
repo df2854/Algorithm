@@ -3,13 +3,10 @@ import java.util.*;
 
 public class Main {
 	static int n, k;
-	static int[][] arr;
-	static int[][] dp;
- 	public static void main(String[] args) throws Exception {
+	static int[][] arr, dp;
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		st = new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		k = Integer.parseInt(st.nextToken());
 		
@@ -21,17 +18,16 @@ public class Main {
 		}
 		
 		dp = new int[n+1][k+1];
-		
 		for (int i = 1; i <= n; i++) {
 			for (int j = 1; j <= k; j++) {
-				if (j < arr[i - 1][0]) {
-					dp[i][j] = dp[i-1][j];
+				if (j >= arr[i-1][0]) {
+					dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j - arr[i-1][0]] + arr[i-1][1]);
 				} else {
-					dp[i][j] = Math.max(dp[i-1][j], dp[i - 1][j - arr[i-1][0]] + arr[i-1][1]);
+					dp[i][j] = dp[i-1][j];
 				}
 			}
 		}
 		
 		System.out.println(dp[n][k]);
 	}
-}
+} 
