@@ -20,16 +20,16 @@ class Solution {
 			}
 			
 			dp = new int[n];
-			Arrays.fill(dp, 1);
 			
 			result = 0;
 			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < i; j++) {
-					if (num[i] > num[j] && dp[i] < dp[j] + 1) {
-						dp[i] = dp[j] + 1;
-					}
-				}
-				result = Math.max(result, dp[i]);
+				int pos = Arrays.binarySearch(dp, 0, result, num[i]);
+				if (pos >= 0) return;
+				int temp = Math.abs(pos) - 1;
+				
+				dp[temp] = num[i];
+				
+				if (temp == result) ++result;
 			}
 			
 			sb.append("#").append(t).append(" ").append(result).append("\n");
