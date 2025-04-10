@@ -46,8 +46,8 @@ public class Main {
 		
 		System.out.println(cnt);
 		if (cnt > 0) {
-			for (int i = 0; i < cnt; i++) {
-				System.out.print(list.get(i) + 1 + " ");
+			for (int pos : list) {
+				System.out.print(pos + 1 + " ");
 			}
 		}
 	}
